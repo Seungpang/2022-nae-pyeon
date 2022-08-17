@@ -5,7 +5,9 @@ on:
     branches:
       - main
       - develop
-      - seungpang
+    paths:
+      - backend/**
+      - .github/**
 
 jobs:
   build:
@@ -29,10 +31,3 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew clean build
-
-      - name: Unit Test Result
-        uses: EnricoMi/publish-unit-test-result-action@v1
-        if: ${{ always() }}
-        with:
-          files: build/test-results/test/**/*.xml
-
