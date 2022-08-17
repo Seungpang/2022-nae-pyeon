@@ -1,0 +1,39 @@
+name: CI-BackEnd
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - seungpang
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - name: Checkout repo
+      uses: actions/checkout@v3
+
+      - name: Install Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: "11"
+          distribution: "temurin"
+
+      - name: Grant execute permisson for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew clean build
+
+      - name: Unit Test Result
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: ${{ always() }}
+        with:
+          files: build/test-results/**/*.xml
+
